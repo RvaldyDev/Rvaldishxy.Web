@@ -1,0 +1,927 @@
+/* Variabel Warna */
+:root {
+    --color-dark: #0d1211; /* Hitam kehijauan gelap */
+    --color-light-green: #4caf50; /* Hijau untuk highlight */
+    --color-text-light: #f0f0f0;
+    --color-text-dim: #aaa;
+    --color-card-bg: #1a2221; /* Latar belakang card gelap */
+
+    /* gradient accents (boleh di-adjust) */
+    --accent-1: 76, 175, 80;   /* green (r,g,b) */
+    --accent-2: 3, 169, 244;   /* cyan  (r,g,b) */
+
+    /* dynamic positions untuk radial gradients (diubah oleh JS) */
+    --gx: 75%;
+    --gy: 10%;
+    --gx2: 20%;
+    --gy2: 85%;
+
+    /* hue rotation untuk efek warna lembut (diubah oleh JS) */
+    --hue: 0;
+
+    --nav-height: 64px; /* tinggi navbar untuk spacing */
+}
+
+/* RESET DASAR */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Google Font: Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: var(--color-dark); /* Warna default body */
+    color: var(--color-text-light);
+    scroll-behavior: smooth;
+}
+
+/* Gunakan Poppins juga untuk heading agar konsisten */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===================================== */
+/* LATAR BELAKANG UTAMA (GRADIENT & NOISE) */
+/* ===================================== */
+.main-wrapper {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    min-height: 100vh;
+    padding: 50px; /* beri ruang seperti contoh Anda */
+    background-color: var(--color-dark);
+
+    /* Enhanced multi-layer gradients with better color combinations */
+    background-image:
+        radial-gradient(circle at var(--gx) var(--gy), rgba(76, 175, 80, 0.4), transparent 50%),
+        radial-gradient(circle at var(--gx2) var(--gy2), rgba(3, 169, 244, 0.3), transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(156, 39, 176, 0.2), transparent 70%),
+        linear-gradient(135deg, #0d1211 0%, #1a1a1a 50%, #0d1211 100%),
+        linear-gradient(45deg, rgba(76, 175, 80, 0.05), rgba(3, 169, 244, 0.03), rgba(156, 39, 176, 0.02));
+    transition: background-position 300ms linear;
+    animation: dynamicBackground 30s ease-in-out infinite;
+}
+
+/* Keyframes for dynamic background movement */
+@keyframes dynamicBackground {
+    0%, 100% {
+        background-position: 0% 0%;
+    }
+    25% {
+        background-position: 100% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    75% {
+        background-position: 0% 100%;
+    }
+}
+
+/* Pseudo-element untuk Efek Noise/Dot Pattern */
+.main-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        repeating-linear-gradient(0deg, #172120, #172120 1px, transparent 1px, transparent 10px),
+        repeating-linear-gradient(90deg, #172120, #172120 1px, transparent 1px, transparent 10px);
+    background-size: 8px 8px;
+    opacity: 0.08;
+}
+
+/* soft color glow layer yang akan di-hue-rotate & blur untuk nuansa dinamis */
+.main-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0; /* top:0;right:0;bottom:0;left:0 */
+    z-index: -2;
+    pointer-events: none;
+
+    /* dua radial yang bergeser sesuai --gx/--gy */
+    background:
+        radial-gradient(circle at var(--gx) var(--gy), rgba(var(--accent-1),0.12), transparent 18%),
+        radial-gradient(circle at var(--gx2) var(--gy2), rgba(var(--accent-2),0.08), transparent 25%);
+    mix-blend-mode: screen;
+    filter: blur(60px) hue-rotate(var(--hue)deg);
+    opacity: 0.6;
+    transition: opacity 400ms ease, filter 400ms linear;
+}
+
+/* sedikit smoothing saat hover (opsional) */
+.main-wrapper:hover::after {
+    opacity: 0.72;
+}
+
+/* beri ruang di atas konten agar tidak tertutup navbar */
+.main-wrapper {
+    padding-top: calc(50px + var(--nav-height));
+}
+
+/* Responsive Container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Responsive Typography */
+html {
+    font-size: 16px;
+}
+
+@media (max-width: 1200px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+/* Responsive Spacing */
+.content-section {
+    padding: 6rem 0;
+}
+
+@media (max-width: 768px) {
+    .content-section {
+        padding: 4rem 0;
+    }
+
+    .main-wrapper {
+        padding: 30px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-section {
+        padding: 3rem 0;
+    }
+
+    .main-wrapper {
+        padding: 20px 10px;
+    }
+}
+
+
+/* Base responsive container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* UTILITIES DAN TYPOGRAPHY */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2em;
+    color: var(--color-light-green); /* Heading utama berwarna hijau */
+}
+
+h2 i {
+    margin-right: 10px;
+}
+
+.content-section {
+    padding: 80px 0;
+}
+
+.secondary-bg {
+    background-color: rgba(26, 34, 33, 0.5); /* Background gelap transparan untuk kontras */
+}
+
+/* ===================================== */
+/* NAVIGATION BAR */
+/* ===================================== */
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(13, 18, 17, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: 800; /* Increased boldness */
+    color: var(--color-text-light);
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-item {
+    color: var(--color-text-dim);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-weight: 600; /* Added boldness */
+}
+
+.nav-item:hover {
+    color: var(--color-light-green);
+    font-weight: 700; /* Increased boldness on hover */
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--color-text-light);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        width: 100%;
+        background: rgba(13, 18, 17, 0.98);
+        text-align: center;
+        transition: 0.3s;
+        flex-direction: column;
+        padding: 2rem 0;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-item {
+        margin: 1rem 0;
+        display: block;
+    }
+
+    /* Hamburger Animation */
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .logo {
+        font-weight: 700; /* Slightly reduced boldness for mobile */
+    }
+    
+    .nav-item {
+        font-weight: 500; /* Base weight for mobile */
+    }
+    
+    .nav-item:hover {
+        font-weight: 600; /* Hover weight for mobile */
+    }
+}
+
+/* ===================================== */
+/* HERO SECTION */
+/* ===================================== */
+.hero-section {
+    height: 100vh;
+    display: inline-block;
+    align-items: center;
+    text-align: center;
+    /* Hero section tidak perlu background-color tambahan karena sudah dicover main-wrapper */
+}
+
+.hero-section h1 {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+}
+
+.hero-section p {
+    font-size: 1.2em;
+    color: var(--color-text-dim);
+}
+
+/* HERO: dua kolom (teks kiri, foto kanan) */
+.hero-inner {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    justify-content: space-between;
+    padding: 40px 0;
+}
+
+.hero-content {
+    flex: 1 1 55%;
+    text-align: left;
+}
+
+.hero-content h1 {
+    font-size: 2.2rem;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    color: var(--color-text-light);
+}
+
+.hero-sub {
+    color: var(--color-text-dim);
+    margin-bottom: 18px;
+    max-width: 60ch;
+}
+
+/* Gambar hero di kanan, skalakan dengan rapi */
+.hero-image {
+    flex: 0 0 40%;
+    max-width: 500px;
+    display: contents;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image img {
+    width: 100;
+    height: auto;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 24px; /* Increased roundness */
+    border: 4px solid rgba(76, 175, 80, 0.12); /* Slightly thicker border */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Add hover effect similar to profile */
+.hero-image img:hover {
+    border-color: var(--color-light-green);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+    -o-transform: scale(1.02);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-inner {
+        flex-direction: column-reverse;
+        gap: 18px;
+        text-align: center;
+        padding: 24px 0;
+    }
+
+    .hero-content {
+        flex: none;
+        width: 100%;
+    }
+
+    .hero-content h1 {
+        font-size: 1.6rem;
+    }
+
+    .hero-image {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .hero-image img {
+        border-radius: 20px; /* Slightly less rounded on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-image img {
+        border-radius: 16px; /* Even less rounded on very small screens */
+    }
+}
+
+/* Button spacing and responsive adjustments */
+.hero-content .btn-primary {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+    display: inline-block;
+}
+
+/* Adjust spacing for different screen sizes */
+@media (max-width: 1200px) {
+    .hero-content .btn-primary {
+        margin-top: 1.5rem;
+        margin-bottom: 3.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content .btn-primary {
+        margin-top: 1.25rem;
+        margin-bottom: 3rem;
+        padding: 12px 28px;
+        font-size: 0.95rem;
+    }
+
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content .btn-primary {
+        margin-top: 1rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+        text-align: center;
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ===================================== */
+/* PROFIL & CARD STYLES */
+/* ===================================== */
+.profile-card, .skill-item, .project-card {
+    background: var(--color-card-bg); /* Latar belakang card gelap */
+    color: var(--color-text-light);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+}
+
+/* Profile layout: image left, text right (responsive) */
+.profile-card {
+    text-align: center; /* keep title centered */
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* New inner layout */
+.profile-inner {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    justify-content: flex-start;
+    max-width: 1000px;
+    margin: 18px auto 0; /* push content below the h2 */
+}
+
+/* Photo column */
+.profile-photo {
+    flex: 0 0 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bio column */
+.profile-bio {
+    flex: 1 1 auto;
+    text-align: left;
+    color: var(--color-text-light);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Slightly larger avatar for desktop, preserved circular shape */
+.profile-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--color-light-green);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+/* Responsive: stack and center on small screens */
+@media (max-width: 768px) {
+    .profile-inner {
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+        margin-top: 12px;
+    }
+
+    .profile-photo {
+        order: -1; /* keep photo on top for mobile */
+    }
+
+    .profile-bio {
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    .profile-img {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .profile-img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-bio {
+        font-size: 0.95rem;
+        padding: 0 8px;
+    }
+}
+
+/* ===================================== */
+/* SKILL SECTION */
+/* ===================================== */
+.skill {
+    padding: 30px 0;
+}
+
+.skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--color-card-bg);
+    border-radius: 8px;
+    padding: 20px 15px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+/* Enhanced Hover Effects */
+.skill-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-light-green);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+}
+
+/* Skill Box Styles */
+.skill-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+}
+
+.skill-box img {
+    width: 40px;
+    height: 40px;
+    padding: 6px;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.skill-box h3 {
+    font-size: 0.9em;
+    color: var(--color-text-light);
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.skill-box p {
+    font-size: 0.8em;
+    color: var(--color-text-dim);
+}
+
+/* Skill Description Styles */
+.skill-description {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--color-text-dim);
+    font-size: 1rem;
+}
+
+/* Responsive adjustments for skill description */
+@media (max-width: 768px) {
+    .skill-description {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .skill-description {
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .skill-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .skill-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .skill-box img {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .skill-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .skill-item {
+        padding: 15px 10px;
+    }
+}
+
+/* ===================================== *//* PROJEK SECTION *//* ===================================== */ .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.project-card {
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    border: 1px solid var(--color-light-green);
+}
+
+.project-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.project-card h3 {
+    color: var(--color-light-green);
+}
+
+/* ===================================== */
+/* KONTAK & FOOTER */
+/* ===================================== */
+.contact-info i {
+    color: var(--color-light-green);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #050807;
+    color: var(--color-text-dim);
+    font-size: 0.9em;
+}
+
+/* ===================================== */
+/* ANIMASI CSS (Fade-In & Scroll) */
+/* ===================================== */
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+    opacity: 0; 
+    animation: fadeInSlide 0.7s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
+/* Animasi Scroll-Triggered (diaktifkan oleh JS) */
+.animate-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===================================== */
+/* MEDIA QUERIES (RESPONSIVE MOBILE) */
+/* ===================================== */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    
+    .nav-links {
+        display: none; /* Hide links by default */
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background-color: rgba(13, 18, 17, 0.95);
+    }
+    
+    .skill-grid, 
+    .project-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Cursor glow effect */
+.cursor-glow {
+    width: 20px;
+    height: 20px;
+    background: rgba(76, 175, 80, 0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.2s ease;
+    mix-blend-mode: screen;
+    backdrop-filter: blur(2px);
+}
+
+.cursor-glow::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background: radial-gradient(
+        circle at center,
+        rgba(76, 175, 80, 0.3),
+        transparent 70%
+    );
+    border-radius: 50%;
+}
+
+/* Flashlight effect */
+.light-rays {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.05) 70%, transparent 90%);
+    mix-blend-mode: screen;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Interactive elements glow effect */
+.nav-item:hover ~ .cursor-glow,
+.btn-primary:hover ~ .cursor-glow,
+.project-card:hover ~ .cursor-glow {
+    transform: scale(2.5);
+    background: rgba(76, 175, 80, 0.2);
+}
+
+/* Button hover animations */
+.btn-primary {
+    position: relative;
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--color-light-green);
+    color: var(--color-dark);
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Interactive states */
+.btn-primary:hover {
+    transform: translateY(-3px);
+    background: transparent;
+    color: var(--color-light-green);
+    box-shadow: 0 7px 20px rgba(76, 175, 80, 0.3);
+    font-weight: 800; /* Make text bolder on hover */
+    letter-spacing: 0.5px; /* Slightly increase letter spacing for emphasis */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn-primary:hover {
+        font-weight: 700; /* Slightly less bold on mobile */
+        letter-spacing: 0.3px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-primary {
+        transition: background-color 0.2s ease;
+    }
+}
+
+/* Scroll to Top Button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--color-light-green);
+    color: var(--color-dark);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.scroll-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-3px);
+    background: transparent;
+    color: var(--color-light-green);
+    box-shadow: 0 7px 20px rgba(76, 175, 80, 0.3);
+}
+
+.scroll-to-top:active {
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments for scroll to top */
+@media (max-width: 768px) {
+    .scroll-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+    }
+}
